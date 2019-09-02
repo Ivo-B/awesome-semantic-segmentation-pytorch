@@ -24,7 +24,7 @@ def short_hash(name):
     return _model_sha1[name][:8]
 
 
-def get_resnet_file(name, root='~/.torch/models'):
+def get_resnet_file(name, root='../torch/models'):
     file_name = '{name}-{short_hash}'.format(name=name, short_hash=short_hash(name))
     root = os.path.expanduser(root)
 
@@ -59,10 +59,13 @@ def get_resnet_file(name, root='~/.torch/models'):
         raise ValueError('Downloaded file has different hash. Please try again.')
 
 
-def get_model_file(name, root='~/.torch/models'):
-    root = os.path.expanduser(root)
-    file_path = os.path.join(root, name + '.pth')
-    if os.path.exists(file_path):
-        return file_path
+def get_model_file(name, root='../torch/models'):
+    if os.path.exists(name):
+        return name
     else:
-        raise ValueError('Model file is not found. Downloading or trainning.')
+        root = os.path.expanduser(root)
+        file_path = os.path.join(root, name)
+        if os.path.exists(file_path):
+            return file_path
+        else:
+            raise ValueError('Model file is not found. Downloading or trainning.')

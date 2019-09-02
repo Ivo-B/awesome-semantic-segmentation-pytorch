@@ -7,6 +7,8 @@ from .ade import ADE20KSegmentation
 from .pascal_voc import VOCSegmentation
 from .pascal_aug import VOCAugSegmentation
 from .sbu_shadow import SBUSegmentation
+from .ptx import PTXSegmentation
+from .cvc import CVCSegmentation
 
 datasets = {
     'ade20k': ADE20KSegmentation,
@@ -15,6 +17,8 @@ datasets = {
     'coco': COCOSegmentation,
     'citys': CitySegmentation,
     'sbu': SBUSegmentation,
+    'ptx': PTXSegmentation,
+    'cvc': CVCSegmentation,
 }
 
 

@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .segbase import SegBaseModel
-
+from collections import OrderedDict
 __all__ = ['FCN', 'get_fcn', 'get_fcn_resnet50_voc',
            'get_fcn_resnet101_voc', 'get_fcn_resnet152_voc']
 
@@ -51,7 +51,7 @@ class _FCNHead(nn.Module):
         return self.block(x)
 
 
-def get_fcn(dataset='pascal_voc', backbone='resnet50', pretrained=False, root='~/.torch/models',
+def get_fcn(dataset='pascal_voc', backbone='resnet50', pretrained=False, root='../runs/models',
             pretrained_base=True, **kwargs):
     acronyms = {
         'pascal_voc': 'pascal_voc',
@@ -59,14 +59,22 @@ def get_fcn(dataset='pascal_voc', backbone='resnet50', pretrained=False, root='~
         'ade20k': 'ade',
         'coco': 'coco',
         'citys': 'citys',
+        'ptx': 'ptx',
     }
     from ..data.dataloader import datasets
     model = FCN(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
     if pretrained:
         from .model_store import get_model_file
         device = torch.device(kwargs['local_rank'])
-        model.load_state_dict(torch.load(get_model_file('fcn_%s_%s' % (backbone, acronyms[dataset]), root=root),
-                              map_location=device))
+        state_dict = torch.load(get_model_file(pretrained, root=root),
+                              map_location=device)
+        substring = 'module.'
+        checkpoint_tmp = OrderedDict()
+        for k in state_dict:
+            new_k = k[len(substring):] if k.startswith(substring) else k
+            checkpoint_tmp[new_k] = state_dict[k]
+        state_dict = checkpoint_tmp
+        model.load_state_dict(state_dict)
     return model
 
 

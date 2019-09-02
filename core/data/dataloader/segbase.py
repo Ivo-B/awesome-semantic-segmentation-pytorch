@@ -41,6 +41,57 @@ class SegmentationDataset(object):
         img, mask = self._img_transform(img), self._mask_transform(mask)
         return img, mask
 
+    # def _sync_transform(self, img, mask):
+    #     crop_size = self.crop_size
+    #     # random mirror
+    #     random_mirror = random.random() < 0.5
+    #     # random scale (short edge)
+    #     short_size = random.randint(int(self.base_size * 0.5), int(self.base_size * 2.0))
+    #     # random crop crop_size
+    #     w, h = img.size
+    #     x1 = random.randint(0, w - crop_size)
+    #     y1 = random.randint(0, h - crop_size)
+    #     # gaussian blur as in PSP
+    #     gaussian_blur = random.random() < 0.5
+    #
+    #     #process img
+    #     if random_mirror:
+    #         img = img.transpose(Image.FLIP_LEFT_RIGHT)
+    #     w, h = img.size
+    #     if h > w:
+    #         ow = short_size
+    #         oh = int(1.0 * h * ow / w)
+    #     else:
+    #         oh = short_size
+    #         ow = int(1.0 * w * oh / h)
+    #     img = img.resize((ow, oh), Image.BILINEAR)
+    #     # pad crop
+    #     if short_size < crop_size:
+    #         padh = crop_size - oh if oh < crop_size else 0
+    #         padw = crop_size - ow if ow < crop_size else 0
+    #         img = ImageOps.expand(img, border=(0, 0, padw, padh), fill=0)
+    #     img = img.crop((x1, y1, x1 + crop_size, y1 + crop_size))
+    #     if gaussian_blur:
+    #         img = img.filter(ImageFilter.GaussianBlur(radius=random.random()))
+    #     # final transform
+    #     img = self._img_transform(img)
+    #
+    #     if len(mask.shape) > 2:
+    #         out_mask = np.zeros((480,480,8))
+    #         for c in range(mask.shape[2]):
+    #             pil_mask = Image.fromarray(mask[:, :, c])
+    #             if random_mirror:
+    #                 pil_mask = pil_mask.transpose(Image.FLIP_LEFT_RIGHT)
+    #             pil_mask = pil_mask.resize((ow, oh), Image.NEAREST)
+    #             # pad crop
+    #             if short_size < crop_size:
+    #                 pil_mask = ImageOps.expand(pil_mask, border=(0, 0, padw, padh), fill=0)
+    #             pil_mask = pil_mask.crop((x1, y1, x1 + crop_size, y1 + crop_size))
+    #             out_mask[:, :, c] = np.array(pil_mask)
+    #
+    #     #    final transform
+    #         mask = self._mask_transform(np.transpose(out_mask, axes=(2, 0, 1)))
+    #     return img, mask
     def _sync_transform(self, img, mask):
         # random mirror
         if random.random() < 0.5:

@@ -29,7 +29,7 @@ class DeepLabV3Plus(nn.Module):
         Image Segmentation."
     """
 
-    def __init__(self, nclass, backbone='xception', aux=True, pretrained_base=True, dilated=True, **kwargs):
+    def __init__(self, nclass, backbone='xception', aux=True, pretrained_base=False, dilated=True, jpu=False, **kwargs):
         super(DeepLabV3Plus, self).__init__()
         self.aux = aux
         self.nclass = nclass
@@ -97,7 +97,7 @@ class DeepLabV3Plus(nn.Module):
 class _DeepLabHead(nn.Module):
     def __init__(self, nclass, c1_channels=128, norm_layer=nn.BatchNorm2d, **kwargs):
         super(_DeepLabHead, self).__init__()
-        self.aspp = _ASPP(2048, [12, 24, 36], norm_layer=norm_layer, **kwargs)
+        self.aspp = _ASPP(2048, [12, 24, 36], norm_layer=norm_layer, norm_kwargs=None, **kwargs)
         self.c1_block = _ConvBNReLU(c1_channels, 48, 3, padding=1, norm_layer=norm_layer)
         self.block = nn.Sequential(
             _ConvBNReLU(304, 256, 3, padding=1, norm_layer=norm_layer),
@@ -115,7 +115,7 @@ class _DeepLabHead(nn.Module):
 
 
 def get_deeplabv3_plus(dataset='pascal_voc', backbone='xception', pretrained=False, root='~/.torch/models',
-                       pretrained_base=True, **kwargs):
+                       pretrained_base=False, **kwargs):
     acronyms = {
         'pascal_voc': 'pascal_voc',
         'pascal_aug': 'pascal_aug',

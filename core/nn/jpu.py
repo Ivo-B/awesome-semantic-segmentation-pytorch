@@ -22,6 +22,8 @@ class SeparableConv2d(nn.Module):
 
 
 # copy from: https://github.com/wuhuikai/FastFCN/blob/master/encoding/nn/customize.py
+# https://arxiv.org/pdf/1903.11816v1.pdf
+#  Joint Pyramid Upsampling
 class JPU(nn.Module):
     def __init__(self, in_channels, width=512, norm_layer=nn.BatchNorm2d, **kwargs):
         super(JPU, self).__init__()

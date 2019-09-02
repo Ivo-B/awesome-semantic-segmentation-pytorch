@@ -158,8 +158,8 @@ def make_data_sampler(dataset, shuffle, distributed):
     return sampler
 
 
-def make_batch_data_sampler(sampler, images_per_batch, num_iters=None, start_iter=0):
-    batch_sampler = data.sampler.BatchSampler(sampler, images_per_batch, drop_last=True)
+def make_batch_data_sampler(sampler, images_per_batch, num_iters=None, start_iter=0, drop_last=True):
+    batch_sampler = data.sampler.BatchSampler(sampler, images_per_batch, drop_last=drop_last)
     if num_iters is not None:
         batch_sampler = IterationBasedBatchSampler(batch_sampler, num_iters, start_iter)
     return batch_sampler

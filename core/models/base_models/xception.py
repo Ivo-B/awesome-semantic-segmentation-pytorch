@@ -103,7 +103,7 @@ class Xception65(nn.Module):
         else:
             raise NotImplementedError
         # Entry flow
-        self.conv1 = nn.Conv2d(3, 32, 3, 2, 1, bias=False)
+        self.conv1 = nn.Conv2d(1, 32, 3, 2, 1, bias=False)
         self.bn1 = norm_layer(32)
         self.relu = nn.ReLU(True)
 
@@ -383,7 +383,7 @@ class XceptionA(nn.Module):
 
 
 # Constructor
-def get_xception(pretrained=False, root='~/.torch/models', **kwargs):
+def get_xception(pretrained=False, root='../torch/models', **kwargs):
     model = Xception65(**kwargs)
     if pretrained:
         from ..model_store import get_model_file
@@ -391,7 +391,7 @@ def get_xception(pretrained=False, root='~/.torch/models', **kwargs):
     return model
 
 
-def get_xception_71(pretrained=False, root='~/.torch/models', **kwargs):
+def get_xception_71(pretrained=False, root='../torch/models', **kwargs):
     model = Xception71(**kwargs)
     if pretrained:
         from ..model_store import get_model_file
@@ -399,7 +399,7 @@ def get_xception_71(pretrained=False, root='~/.torch/models', **kwargs):
     return model
 
 
-def get_xception_a(pretrained=False, root='~/.torch/models', **kwargs):
+def get_xception_a(pretrained=False, root='../torch/models', **kwargs):
     model = XceptionA(**kwargs)
     if pretrained:
         from ..model_store import get_model_file

@@ -1,0 +1,108 @@
+{
+  "run_config": {
+    "num": "001"
+    // add/remove "debug" for debuging [specific settings]
+    , "id": ""
+    // GPU ids to use for experiment, if [] training will be done on cpu
+    , "gpu_ids":
+    [
+      0, 1
+    ]
+    , "local_rank": 0
+    // seed to make experiment reproducible
+    , "manual_seed": "0xCAFFEE"
+    , "path": {
+      "root_dir": "../runs"
+    }
+    //logger config
+    , "logger": {
+      // print log every print_freq
+      "print_freq": 200
+      // save model every checkpoint_freq
+      , "save_checkpoint_freq": 5e3
+    }
+    //***put the path to resuming file if needed
+    , "resume": ""
+  }
+
+   // Model parameters
+  ,"model_config": {
+    //***model name (default: fcn32s)
+    // ['fcn32s', 'fcn16s', 'fcn8s', 'fcn', 'psp', 'deeplabv3', 'deeplabv3_plus',
+    // 'danet', 'denseaspp', 'bisenet','encnet', 'dunet', 'icnet',
+    // 'enet', 'ocnet', 'ccnet', 'psanet','cgnet', 'espnet', 'lednet', 'dfanet']
+    "model": "fcn"
+    //***'backbone name (default: vgg16)')
+    // 'vgg16', 'resnet18', 'resnet50','resnet101', 'resnet152', 'densenet121',
+    // 'densenet161', 'densenet169', 'densenet201'
+    ,"backbone": "resnet50"
+    // TODO: add more model parameters
+    // Joint Pyramid Upsampling
+    , "jpu": false
+  }
+
+  // Dataset parameters
+  , "data_config": {
+    // 'dataset name (default: ptx)'
+    "dataset_name": "ptx"
+    //root of dataset
+    , "dataset_root": "E:/repos/PTXSegmentation"
+    // 'base image size')
+    , "base_size": 1024
+    // 'crop image size'
+    , "crop_size": 480
+    , "train": {
+      // shuffle data after each epoch
+      "use_shuffle": true
+      // 'dataloader threads'
+      , "n_workers": 8
+    }
+    , "val": {
+      // shuffle data after each epoch
+      "use_shuffle": false
+      // 'dataloader threads'
+      , "n_workers": 8
+    }
+  }
+
+  // Optimizer parameters
+  , "optim_config": {
+    // start epochs (default:0)
+    "start_epoch": 0
+    // total number of iteration to train
+    , "max_iters": 20e4
+    // 'run validation every val-epoch'
+    , "val_freq": 1e3
+    // 'skip validation during training'
+    , "skip_val": false
+
+    // 'input batch size for training (default: 8) [per GPU]')
+    , "batch_size": 4
+    , "optim": "radam"
+    //'learning rate (default: 1e-4)'
+    , "lr": 1e-4
+    //'w-decay (default: 5e-4)'
+    , "weight_decay": 5e-4
+    // 'momentum (default: 0.9)'
+    , "momentum": 0.9
+    // Adam specific
+    //, "beta2": 0.999
+
+    , "lr_scheduler": "WarmupPolyLR"
+    , "power": 0.9
+    // 'warmup iters'
+    , "warmup_iters": 0
+    // 'lr = warmup_factor * lr'
+    , "warmup_factor": 0.3333
+    // 'method of warmup'
+    , "warmup_method": "linear"
+
+    // LOSS Function
+    // Online hard example mining
+    , "use_ohem": false
+    // 'Auxiliary loss'
+    , "aux": false
+    // 'auxiliary loss weight'
+    , "aux_weight": 0.4
+    }
+}

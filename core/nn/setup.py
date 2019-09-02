@@ -13,6 +13,10 @@ requirements = ["torch"]
 
 
 def get_extension():
+    nvcc_args = [
+        '-D__CUDA_NO_HALF_OPERATORS__'  # <-- Just add this line
+    ]
+    cxx_args = ['']
     this_dir = os.path.dirname(os.path.abspath(__file__))
     extensions_dir = os.path.join(this_dir, "csrc")
 
@@ -40,10 +44,13 @@ def get_extension():
             sources,
             include_dirs=include_dirs,
             define_macros=define_macros,
+            extra_compile_args={'cxx': cxx_args, 'nvcc': nvcc_args}
         )
     ]
 
     return ext_modules
+
+
 
 
 setup(
